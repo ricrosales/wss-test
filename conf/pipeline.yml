@@ -1,0 +1,67 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: wss_test
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    CoinbaseHeartbeat:
+      class: aineko.extras.WSS
+      outputs:
+        - coinbase
+      node_params:
+        max_retries: 2
+        url: "wss://ws-feed.exchange.coinbase.com"
+        init_messages:
+          - {"type": "subscribe", "channels": [{"name": "heartbeat", "product_ids": ["BTC-USD"]}]}
+    BinanceAvgPrice:
+      class: aineko.extras.WSS
+      outputs:
+        - binance
+      node_params:
+        max_retries: 2
+        url: "wss://stream.binance.us:9443/ws/btcusdt@aggTrade"
+    AlpacaMarketData:
+      class: aineko.extras.WSS
+      outputs:
+        - alpaca
+      node_params:
+        max_retries: 2
+        url: "wss://stream.data.alpaca.markets/v1beta3/crypto/us"
+        init_messages:
+          - {"action": "auth", "key": "{$ALPACA_API_KEY}", "secret": "{$ALPACA_API_SECRET}"}
+          - action: "subscribe"
+            quotes: ["BTC/USD", "ETH/USD", "LTC/USD"]
+            dailyBars: ["BTC/USD", "ETH/USD", "LTC/USD"]
+    AlchemyEthereumAaveLogs:
+      class: aineko.extras.WSS
+      outputs:
+        - alchemy
+      node_params:
+        max_retries: 2
+        url: "wss://opt-mainnet.g.alchemy.com/v2/{$ALCHEMY_OPTIMISM_API_KEY}"
+        init_messages:
+          - jsonrpc: "2.0"
+            id: 1
+            method: "eth_subscribe"
+            params:
+              - "logs"
+              - address: "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+                topics:
+                  - "0x804c9b842b2748a22bb64b345453a3de7ca54a6ca45ce00d415894979e22897a"
+        metadata:
+          product: "Aave"
+          chain: "OPTIMISM"
+          source: "alchemy_ws"
+
+  datasets:
+    coinbase:
+      type: kafka_stream
+    binance:
+      type: kafka_stream
+    alpaca:
+      type: kafka_stream
+    alchemy:
+      type: kafka_stream

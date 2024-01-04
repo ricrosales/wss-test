@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "wss-test"
+version = "0.0.0"
+description = "WSS Testing Suite"
+authors = ["Ricardo Rosales <ricardo@aineko.dev>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+aineko = { git = "https://github.com/aineko-dev/aineko.git", branch = "feat/wss-connector", extras = ["wss", "fastapi"] }
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.1"
+pytest-cov = "^4.1.0"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    # Ignore this depracation warning because of the way virtualenvs is implemented
+    "ignore:.*pkg_resources.*:DeprecationWarning",
+]
