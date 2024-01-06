@@ -1,0 +1,58 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: rest_test
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    CoinbaseTickerStats:
+      class: aineko.extras.REST
+      outputs:
+        - coinbase
+      node_params:
+        max_retries: 2
+        url: "https://api.exchange.coinbase.com/products/BTC-USD/ticker"
+        headers: {"Content-Type": "application/json"}
+        metadata: {"exchange": "COINBASE"}
+    BinanceMarketData:
+      class: aineko.extras.REST
+      outputs:
+        - binance
+      node_params:
+        max_retries: 2
+        url: "https://api.binance.us/api/v3/trades?symbol=LTCBTC"
+    AlpacaMarketData:
+      class: aineko.extras.REST
+      outputs:
+        - alpaca
+      node_params:
+        max_retries: 2
+        url: "https://data.alpaca.markets/v1beta3/crypto/us/latest/bars?symbols=BTC/USD,LTC/USD,ETH/USD"
+        metadata:
+          exchange: alpaca
+          symbols: [BTC/USD, "LTC/USD", "ETH/USD"]
+        headers: {"APCA-API-KEY-ID": "{$ALPACA_API_KEY}", "APCA-API-SECRET-KEY": "{$ALPACA_API_SECRET}"}  
+    AlchemyVitalikBalances:
+      class: aineko.extras.REST
+      outputs:
+        - alchemy
+      node_params:
+        max_retries: 2
+        url: "https://eth-mainnet.g.alchemy.com/nft/v3/{$ALCHEMY_ETHEREUM_API_KEY}/getFloorPrice?collectionSlug=boredapeyachtclub"
+        headers: {"accept": "application/json"}
+        metadata:
+          collection: "boredapeyachtclub"
+          chain: "ETHEREUM"
+          source: "alchemy_rest"
+
+  datasets:
+    coinbase:
+      type: kafka_stream
+    binance:
+      type: kafka_stream
+    alpaca:
+      type: kafka_stream
+    alchemy:
+      type: kafka_stream

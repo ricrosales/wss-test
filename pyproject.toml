@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-aineko = { git = "https://github.com/aineko-dev/aineko.git", branch = "feat/wss-connector", extras = ["wss", "fastapi"] }
+aineko = { git = "https://github.com/aineko-dev/aineko.git", branch = "feat/https-connector", extras = ["rest", "websocket", "fastapi"] }
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.1"
