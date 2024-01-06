@@ -34,7 +34,7 @@ pipeline:
           exchange: alpaca
           symbols: [BTC/USD, "LTC/USD", "ETH/USD"]
         headers: {"APCA-API-KEY-ID": "{$ALPACA_API_KEY}", "APCA-API-SECRET-KEY": "{$ALPACA_API_SECRET}"}  
-    AlchemyVitalikBalances:
+    AlchemyFloorBAYC:
       class: aineko.extras.REST
       outputs:
         - alchemy
