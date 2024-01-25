@@ -9,7 +9,7 @@ class Transform(AbstractNode):
     """Base class for message transformations."""
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
-        """Initalize."""
+        """Initialize."""
         self.input_dataset = list(self.consumers.keys())[0]
         out = list(self.producers.keys())
         out.remove("logging")

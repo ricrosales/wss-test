@@ -9,7 +9,7 @@ class TopOfBook(AbstractNode):
     """Run a model."""
 
     def _pre_loop_hook(self, params: dict | None = None) -> None:
-        """Initalize."""
+        """Initialize."""
         self.model_state = {}
 
     def _execute(self, params: dict | None = None) -> None:
