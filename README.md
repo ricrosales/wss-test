@@ -19,7 +19,7 @@ poetry run aineko service start
 Then start the pipeline using. Note you must prepend the aineko run command as shown in order 
 to inject environment variables from the .env file into the pipeline.
 ```
-env $(cat .env | xargs) poetry run aineko run ./conf/pipeline.yml
+env $(cat .env | xargs) poetry run aineko run conf/websocket.yml
 ```
 
 ## Observe the pipeline

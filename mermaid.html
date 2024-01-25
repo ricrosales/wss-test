@@ -1,0 +1,24 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <body>
+        <pre class="mermaid">
+        flowchart LR
+classDef datasetClass fill:#87CEEB
+classDef nodeClass fill:#eba487
+N_CoinbaseBook((CoinbaseBook)):::nodeClass -->  T_coinbase[coinbase]:::datasetClass
+N_BinanceUSBook((BinanceUSBook)):::nodeClass -->  T_binance[binance]:::datasetClass
+T_coinbase[coinbase]:::datasetClass -->  N_CoinbaseTransform((CoinbaseTransform)):::nodeClass
+N_CoinbaseTransform((CoinbaseTransform)):::nodeClass -->  T_l1_updates[l1_updates]:::datasetClass
+T_binance[binance]:::datasetClass -->  N_BinanceUSTransform((BinanceUSTransform)):::nodeClass
+N_BinanceUSTransform((BinanceUSTransform)):::nodeClass -->  T_l1_updates[l1_updates]:::datasetClass
+T_l1_updates[l1_updates]:::datasetClass -->  N_TopOfBook((TopOfBook)):::nodeClass
+N_TopOfBook((TopOfBook)):::nodeClass -->  T_top_of_book[top_of_book]:::datasetClass
+
+        </pre>
+        <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        </script>
+    </body>
+    </html>
+    

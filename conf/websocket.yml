@@ -8,7 +8,7 @@ pipeline:
 
   nodes:
     CoinbaseHeartbeat:
-      class: aineko.extras.WebSocket
+      class: aineko.extras.WebSocketClient
       outputs:
         - coinbase
       node_params:
@@ -17,14 +17,14 @@ pipeline:
         init_messages:
           - {"type": "subscribe", "channels": [{"name": "heartbeat", "product_ids": ["BTC-USD"]}]}
     BinanceAvgPrice:
-      class: aineko.extras.WebSocket
+      class: aineko.extras.WebSocketClient
       outputs:
         - binance
       node_params:
         max_retries: 2
         url: "wss://stream.binance.us:9443/ws/btcusdt@aggTrade"
     AlpacaMarketData:
-      class: aineko.extras.WebSocket
+      class: aineko.extras.WebSocketClient
       outputs:
         - alpaca
       node_params:
@@ -36,7 +36,7 @@ pipeline:
             quotes: ["BTC/USD", "ETH/USD", "LTC/USD"]
             dailyBars: ["BTC/USD", "ETH/USD", "LTC/USD"]
     AlchemyEthereumAaveLogs:
-      class: aineko.extras.WebSocket
+      class: aineko.extras.WebSocketClient
       outputs:
         - alchemy
       node_params:

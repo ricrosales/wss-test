@@ -1,0 +1,58 @@
+# Copyright 2023 Aineko Authors
+# SPDX-License-Identifier: Apache-2.0
+pipeline:
+  name: routing_example
+
+  default_node_settings:
+    num_cpus: 0.5
+
+  nodes:
+    # Market data
+    CoinbaseBook:
+      class: aineko.extras.WebSocketClient
+      outputs:
+        - coinbase
+      node_params:
+        max_retries: 2
+        url: "wss://ws-feed.exchange.coinbase.com"
+        init_messages:
+          - {"type": "subscribe", "channels": [{"name": "ticker", "product_ids": ["BTC-USD"]}]}
+    BinanceUSBook:
+      class: aineko.extras.WebSocketClient
+      outputs:
+        - binance
+      node_params:
+        max_retries: 2
+        url: "wss://stream.binance.us:9443/ws/btcusdt@bookTicker"
+
+    # Transformers
+    CoinbaseTransform:
+      class: wss_test.transform.CoinbaseL1Transform
+      inputs:
+        - coinbase
+      outputs:
+        - l1_updates
+    BinanceUSTransform:
+      class: wss_test.transform.BinanceUSL1Transform
+      inputs:
+        - binance
+      outputs:
+        - l1_updates
+
+    # Models
+    TopOfBook:
+      class: wss_test.model.TopOfBook
+      inputs:
+        - l1_updates
+      outputs:
+        - top_of_book
+
+  datasets:
+    coinbase:
+      type: kafka_stream
+    binance:
+      type: kafka_stream
+    l1_updates:
+      type: kafka_stream
+    top_of_book:
+      type: kafka_stream
